@@ -9,6 +9,7 @@ set(OUTPUT_SPI_DATA_PIN 3)
 set(OUTPUT_SPI_CLOCK_PIN 2)
 set(SPI_INTERFACE spi0)
 
+
 # Use multi-segment, starting index of second led strip or OFF to disable
 set(SECOND_SEGMENT_INDEX 134)
 
