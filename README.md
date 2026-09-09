@@ -1,10 +1,12 @@
-> **Custom LED layout fork**
+> **Custom LED layout fork — Pimoroni Plasma 2040**
 >
-> This fork exists solely to build firmware for my custom LED layout. No firmware features have been added, removed or otherwise changed relative to upstream; the customisations are limited to GPIO assignments and LED segment configuration. Build-workflow adjustments support packaging this configuration.
+> This fork exists solely to build firmware for my Pimoroni Plasma 2040 and custom LED layout. No firmware features have been added, removed or otherwise changed relative to upstream; the customisations are limited to GPIO assignments and LED segment configuration. The build workflow produces only this custom firmware.
 >
-> This fork is unlikely to be useful unless you have the same layout. For general use, firmware downloads and documentation, see [upstream HyperSerialPico](https://github.com/awawa-dev/HyperSerialPico).
+> **Configuration:** RP2040, SK6812 cold-white LEDs, GPIO14 for the first segment and GPIO15 for the second, split at LED index 132, with the second segment reversed.
 >
-> Custom layout: GPIO14/GPIO15, second segment starting at index 132, with the second segment reversed. Board-specific build variants override the GPIO assignments but retain the segment configuration.
+> **Download:** From a successful GitHub Actions run, download `plasma2040-custom-gpio14-15-split132-reversed` and extract `HyperSerialPico_rp2040_sk6812Cold_rev_multisegment_at_132.uf2`. This is the only firmware built by this fork. Tagged builds attach the same UF2 to a draft release.
+>
+> This fork is unlikely to be useful unless you have the same layout. For general use, other boards or LED types, firmware downloads and documentation, see [upstream HyperSerialPico](https://github.com/awawa-dev/HyperSerialPico). The upstream documentation below describes its wider capabilities; its default pinout and release downloads do not describe this custom build.
 
 # HyperSerialPico
 Adalight serial port LED driver implementation for Raspberry Pi Pico RP2040/RP2350.  
