@@ -2,7 +2,7 @@
 *
 *  MIT License
 *
-*  Copyright (c) 2023 awawa-dev
+*  Copyright (c) 2023-2026 awawa-dev
 *
 *  https://github.com/awawa-dev/HyperSerialPico
 *
@@ -35,6 +35,8 @@
 	#endif
 #elif SPILED_APA102
 	typedef ColorDotstartBgr ColorDefinition;
+#elif SPILED_WS2801
+	typedef ColorRgb ColorDefinition;
 #endif
 
 
@@ -123,11 +125,11 @@ class CalibrationConfig
 		 * @brief print RGBW calibration parameters when no data is received
 		 *
 		 */
-		void printCalibration()
+		template <size_t N>
+		void printCalibration(char (&output)[N])
 		{
-			char output[128];
-			snprintf(output, sizeof(output),"RGBW => Gain: %i/255, red: %i, green: %i, blue: %i\r\n", gain, red, green, blue);
-			printf(output);
+			snprintf(output, N, "RGBW => Gain: %i/255, red: %i, green: %i, blue: %i\r\n", gain, red, green, blue);
+			tud_cdc_write_str(output);
 		}
 } calibrationConfig;
 

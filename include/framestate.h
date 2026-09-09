@@ -2,7 +2,7 @@
 *
 *  MIT License
 *
-*  Copyright (c) 2023 awawa-dev
+*  Copyright (c) 2023-2026 awawa-dev
 *
 *  https://github.com/awawa-dev/HyperSerialPico
 *
@@ -35,6 +35,7 @@
 enum class AwaProtocol
 {
 	HEADER_A,
+	HEADER_W,	
 	HEADER_w,
 	HEADER_a,
 	HEADER_HI,
@@ -47,6 +48,7 @@ enum class AwaProtocol
 	RED,
 	GREEN,
 	BLUE,
+	EXTRA_COLOR_BYTE_4,	
 	FLETCHER1,
 	FLETCHER2,
 	FLETCHER_EXT
@@ -60,6 +62,7 @@ class
 {
 	volatile AwaProtocol state = AwaProtocol::HEADER_A;
 	bool protocolVersion2 = false;
+	bool protocolVersion3 = false;	
 	uint8_t CRC = 0;
 	uint16_t count = 0;
 	uint16_t currentLed = 0;
@@ -67,6 +70,7 @@ class
 	uint16_t fletcher2 = 0;
 	uint16_t fletcherExt = 0;
 	uint8_t position = 0;
+	bool regroup = false;
 
 	public:
 		ColorDefinition color;
@@ -170,6 +174,27 @@ class
 		}
 
 		/**
+		 * @brief Set if frame protocol version 3 (direct 32bit mode)
+		 *
+		 * @param newVer
+		 */
+		inline void setProtocolVersion3(bool newVer)
+		{
+			protocolVersion3 = newVer;
+		}
+
+		/**
+		 * @brief Verify if frame protocol version 3 (direct 32bit mode)
+		 *
+		 * @return true
+		 * @return false
+		 */
+		inline bool isProtocolVersion3() const
+		{
+			return protocolVersion3;
+		}		
+
+		/**
 		 * @brief  Set new AWA frame state
 		 *
 		 * @param newState
@@ -210,6 +235,16 @@ class
 			fletcher1 = (fletcher1 + (uint16_t)input) % 255;
 			fletcher2 = (fletcher2 + fletcher1) % 255;
 			fletcherExt = (fletcherExt + (input ^ (position++))) % 255;
+		}
+
+		void setRegroup(bool newValue)
+		{
+			regroup = newValue;
+		}
+
+		bool getRegroup()
+		{
+			return regroup;
 		}
 
 		/**
