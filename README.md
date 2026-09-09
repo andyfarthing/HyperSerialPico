@@ -1,3 +1,11 @@
+> **Custom LED layout fork**
+>
+> This fork exists solely to build firmware for my custom LED layout. No firmware features have been added, removed or otherwise changed relative to upstream; the customisations are limited to GPIO assignments and LED segment configuration. Build-workflow adjustments support packaging this configuration.
+>
+> This fork is unlikely to be useful unless you have the same layout. For general use, firmware downloads and documentation, see [upstream HyperSerialPico](https://github.com/awawa-dev/HyperSerialPico).
+>
+> Custom layout: GPIO14/GPIO15, second segment starting at index 132, with the second segment reversed. Board-specific build variants override the GPIO assignments but retain the segment configuration.
+
 # HyperSerialPico
 Adalight serial port LED driver implementation for Raspberry Pi Pico RP2040/RP2350.  
 
