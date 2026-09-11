@@ -10,6 +10,15 @@ jobs:
 
   HyperSerialPico:
     runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        include:
+          - board: pico
+            chip: rp2040
+            package: Pimoroni_Plasma_RP2040
+          - board: pimoroni_plasma2350
+            chip: rp2350
+            package: Pimoroni_Plasma_RP2350
 
     steps:
     - uses: actions/checkout@v7.0.1
@@ -21,20 +30,22 @@ jobs:
       with:
         release: '14.2.Rel1'
 
-    - name: Build custom Plasma 2040 firmware
+    - name: Build ${{ matrix.package }} custom firmware
       shell: bash
       run: |
         mkdir build
         cd build
-        cmake -DTARGET_BOARD=pico ..
-        cmake --build . --config Release --target HyperSerialPico_rp2040_sk6812Cold_rev_multisegment_at_132
+        cmake -DTARGET_BOARD=${{ matrix.board }} ..
+        cmake --build . --config Release --target HyperSerialPico_${{ matrix.chip }}_sk6812Cold_rev_multisegment_at_132
+        zip -j ../firmware/${{ matrix.package }}.zip ../firmware/HyperSerialPico_${{ matrix.chip }}_sk6812Cold_rev_multisegment_at_132.uf2
 
     - uses: actions/upload-artifact@v7.0.1
-      name: Upload custom Plasma 2040 firmware
+      name: Upload ${{ matrix.package }} custom firmware
       with:
-        name: plasma2040-custom-gpio14-15-split132-reversed
+        name: ${{ matrix.package }}
+        archive: ${{ startsWith(github.ref, 'refs/tags/') }}
         if-no-files-found: error
-        path: firmware/HyperSerialPico_rp2040_sk6812Cold_rev_multisegment_at_132.uf2
+        path: firmware/${{ matrix.package }}.zip
 
 ################################
 ###### Publish Releases ########
@@ -61,7 +72,8 @@ jobs:
 
       - uses: actions/download-artifact@v8.0.1
         with:
-          name: plasma2040-custom-gpio14-15-split132-reversed
+          pattern: Pimoroni_Plasma_RP*
+          merge-multiple: true
 
       # create draft release and upload artifacts
       - name: Create draft release
@@ -69,7 +81,9 @@ jobs:
         with:
           name: HyperSerialPico ${{ env.VERSION }}
           tag_name: ${{ env.TAG }}
-          files: HyperSerialPico_rp2040_sk6812Cold_rev_multisegment_at_132.uf2
+          files: |
+            Pimoroni_Plasma_RP2040.zip
+            Pimoroni_Plasma_RP2350.zip
           fail_on_unmatched_files: true
           draft: true
           prerelease: ${{ env.preRelease }}
